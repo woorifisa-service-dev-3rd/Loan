@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="mt-5">Welcome to the User Management System</h1>
+    <p th:if="${name != null}">
+        안녕하세요 <span th:text="${name}"></span>님!
+    </p>
+
+    <div class="mt-3">
+        <a href="/web/login" class="btn btn-success">Login</a>
+        <a href="/web/register" class="btn btn-primary">Register</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Selected Products</title>
+</head>
+<body>
+<h1>Products You Have Selected</h1>
+
+<h2>Your Selected Products:</h2>
+<ul>
+    <li th:each="loan : ${loans}">
+        <p>Product Company: <span th:text="${loan.product.company}"></span></p>
+        <p>Product Title: <span th:text="${loan.product.title}"></span></p>
+        <p>Min Rate: <span th:text="${loan.product.minRate}"></span></p>
+        <p>Max Limit: <span th:text="${loan.product.maxLimit}"></span></p>
+    </li>
+</ul>
+
+<h2>Add More Products:</h2>
+<ul>
+    <li th:each="product : ${products}">
+        <p>Company: <span th:text="${product.company}"></span></p>
+        <p>Title: <span th:text="${product.title}"></span></p>
+        <p>Min Rate: <span th:text="${product.minRate}"></span></p>
+        <p>Max Limit: <span th:text="${product.maxLimit}"></span></p>
+    </li>
+</ul>
+
+<a th:href="@{/product}">Back to All Products</a>
+</body>
+</html>

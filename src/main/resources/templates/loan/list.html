@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>My Selected Products</title>
+</head>
+<body>
+<h1>금융 대출 홈페이지</h1>
+
+<h2>현재 대출:</h2>
+<ul>
+  <li th:each="loan : ${loans}">
+    <p>회사 이름: <span th:text="${loan.product.company}"></span></p>
+    <p>상품 이름: <span th:text="${loan.product.title}"></span></p>
+    <p>최저 금리: <span th:text="${loan.product.minRate}"></span> %</p>
+    <p>최대 한도: <span th:text="${loan.product.maxLimit}"></span> 만원</p>
+    <form th:action="@{/product/delete-loan/{loanId}(loanId=${loan.id})}" method="post">
+      <button type="submit">대출 제거하기</button>
+    </form>
+  </li>
+</ul>
+
+<h2>추가 하고 싶은 대출:</h2>
+<ul>
+  <li th:each="product : ${products}">
+    <p>회사 이름: <span th:text="${product.company}"></span></p>
+    <p>상품 이름: <span th:text="${product.title}"></span></p>
+    <p>최저 금리: <span th:text="${product.minRate}"></span> %</p>
+    <p>최대 한도: <span th:text="${product.maxLimit}"></span> 만원</p>
+    <form th:action="@{/product/add-product/{productId}(productId=${product.id})}" method="post">
+      <button type="submit">대출 추가하기</button>
+    </form>
+  </li>
+</ul>
+
+<a th:href="@{/product}">Back to All Products</a>
+</body>
+</html>
