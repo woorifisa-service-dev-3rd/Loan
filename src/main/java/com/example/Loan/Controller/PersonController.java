@@ -36,7 +36,7 @@ public class PersonController {
     @GetMapping("/nick_check/{nickname}")
     public ResponseEntity<Boolean> NickCheck(@PathVariable String nickname)
     {
-        return ResponseEntity.ok(personService.IDDuplicateCheck(nickname));
+        return ResponseEntity.ok(personService.NickDuplicateCheck(nickname));
     }
 
     @GetMapping("/login")

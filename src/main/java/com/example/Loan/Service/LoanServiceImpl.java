@@ -1,5 +1,6 @@
 package com.example.Loan.Service;
 
+import com.example.Loan.DTO.LoanResponse;
 import com.example.Loan.Entity.Loan;
 import com.example.Loan.Entity.Person;
 import com.example.Loan.Entity.Product;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,13 +48,14 @@ public class LoanServiceImpl implements LoanService{
             return "대출 도중 오류 발생";
         }
 
-
     }
 
     @Transactional
     @Override
-    public List<Loan> getOneUsersLoanList(String user_id) {
-        Long person_id = personRepository.findByUserId(user_id).get().getId();
-        return loanRepository.findAllLoanByUserId(person_id);
+    public List<LoanResponse> getOneUsersLoanList(String user_id) {
+        Long person_id = personRepository.findByUserId(user_id).orElseThrow(() -> new RuntimeException("User not found")).getId();
+        return loanRepository.findAllLoanByUserId(person_id).stream()
+                .map(LoanResponse::FROM)
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.Loan.Controller;
 
+import com.example.Loan.DTO.ProductResponse;
 import com.example.Loan.Entity.Product;
 import com.example.Loan.Service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,8 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping()
-    private List<Product> GetAllProduct()
+    @GetMapping
+    private List<ProductResponse> GetAllProduct()
     {
         return productService.getAllProduct();
     }

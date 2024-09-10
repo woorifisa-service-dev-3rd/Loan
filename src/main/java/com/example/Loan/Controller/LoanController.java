@@ -1,6 +1,7 @@
 package com.example.Loan.Controller;
 
 
+import com.example.Loan.DTO.LoanResponse;
 import com.example.Loan.DTO.PersonDTOByFront;
 import com.example.Loan.Entity.Loan;
 import com.example.Loan.Service.LoanService;
@@ -25,8 +26,11 @@ public class LoanController {
     public ResponseEntity<String> saveLoan (@PathVariable Long product_id,
                                             HttpSession session)
     {
+        if (session.isNew())
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인 부터 하세요");
+        }
         String user_id = session.getAttribute("userid").toString();
-
         //대출 중복 문제 고민해보기
 
         String savestate = loanService.SaveLoan(product_id,user_id);
@@ -41,7 +45,7 @@ public class LoanController {
 
     //특정 사용자 모든 Loan 가져오기
     @GetMapping("/loanlist")
-    public List<Loan> getLoanListByPerson(HttpSession session)
+    public List<LoanResponse> getLoanListByPerson(HttpSession session)
     {
         String user_id = session.getAttribute("userid").toString();
         log.info(user_id+"여기id");
