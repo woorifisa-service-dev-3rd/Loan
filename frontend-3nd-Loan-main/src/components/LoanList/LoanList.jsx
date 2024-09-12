@@ -1,6 +1,8 @@
-// LoanList.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // useNavigate 추가
 import { LoanItem } from './LoanItem';
+import { LoanApplyButton } from './LoanApplyButton';
+import { getCookie } from '../UserSheet/cookies';
 
 export const LoanList = () => {
   const [loans, setLoans] = useState([]);
@@ -8,6 +10,7 @@ export const LoanList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate(); // useNavigate 추가
 
   useEffect(() => {
     const fetchLoans = async () => {
@@ -26,29 +29,21 @@ export const LoanList = () => {
       }
     };
 
-    const checkSession = async () => {
-      try {
-        const response = await fetch('http://localhost:8081/person/sessioncheck', {
-          method: 'GET',
-          credentials: 'include',
-        });
-        if (!response.ok) {
-          throw new Error('Failed to check session');
-        }
-        const result = await response.json();
-        setIsLoggedIn(result);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
     fetchLoans();
-    checkSession();
   }, []);
 
   useEffect(() => {
-    setFilteredLoans(loans);
-  }, [loans]);
+    const checkLoginStatus = () => {
+      const userId = getCookie('userid');
+      setIsLoggedIn(!!userId);
+    };
+
+    checkLoginStatus();
+  }, []);
+
+  useEffect(() => {
+    console.log('Is Logged In:', isLoggedIn);
+  }, [isLoggedIn]);
 
   const handleLoanApply = async (loanId) => {
     try {
@@ -56,11 +51,19 @@ export const LoanList = () => {
         method: 'POST',
         credentials: 'include',
       });
-      if (!response.ok) {
-        throw new Error('Failed to apply for loan');
-      }
       const result = await response.text();
-      alert(result); // 서버로부터 받은 응답을 alert로 표시
+      
+      if (response.ok) {
+        if (result === '대출 성공') {
+          alert(result);
+          // 대출 성공 후 페이지를 갱신하거나 다른 작업을 수행할 수 있습니다.
+        } else {
+          alert(result);
+        }
+        navigate('/'); // 대출 중복 시 메인 페이지로 리디렉션
+      } else {
+        throw new Error(result);
+      }
     } catch (err) {
       setError(err.message);
     }
@@ -77,13 +80,20 @@ export const LoanList = () => {
               <LoanItem
                 key={loan.id}
                 loan={loan}
-                onApply={handleLoanApply} // 대출받기 핸들러 전달
+                onApply={handleLoanApply}
               />
             ))}
           </ul>
           {isLoggedIn && (
             <div className="flex justify-center p-4">
-              {/* 로그인 상태에 따라 대출받기 버튼이 렌더링됨 */}
+              {/* Apply button for each loan item */}
+              {filteredLoans.map((loan) => (
+                <LoanApplyButton
+                  key={loan.id}
+                  loanId={loan.id}
+                  onApply={handleLoanApply}
+                />
+              ))}
             </div>
           )}
         </div>

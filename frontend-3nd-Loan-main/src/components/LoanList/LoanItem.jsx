@@ -1,7 +1,9 @@
+// LoanItem.jsx
 import React from 'react';
+import { LoanApplyButton } from './LoanApplyButton';
 import { useNavigate } from 'react-router-dom';
 
-export const LoanItem = ({ loan }) => {
+export const LoanItem = ({ loan, onApply }) => {
   const navigate = useNavigate();
 
   const handleNextClick = () => {
@@ -10,7 +12,6 @@ export const LoanItem = ({ loan }) => {
 
   // max_limit을 숫자로 변환
   const maxLimit = Number(loan.max_limit);
-  
   return (
     <div className="flex justify-center items-center py-2 px-4">
       <a
@@ -44,8 +45,9 @@ export const LoanItem = ({ loan }) => {
               </dd>
             </div>
           </dl>
+          <LoanApplyButton loanId={loan.id} onApply={onApply} />
         </div>
       </a>
     </div>
   );
-}
+};

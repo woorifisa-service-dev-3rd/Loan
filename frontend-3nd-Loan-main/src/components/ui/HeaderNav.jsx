@@ -1,5 +1,7 @@
+// HeaderNav.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { LogoutButton } from "../UserSheet/LogoutButton"// LogoutButton 컴포넌트 임포트
 
 export default function HeaderNav() {
   const navigate = useNavigate();
@@ -49,6 +51,7 @@ export default function HeaderNav() {
           >
             로그인
           </button>
+          <LogoutButton />
         </div>
       </div>
     </header>

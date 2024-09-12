@@ -1,3 +1,4 @@
+// LoanApplyButton.jsx
 import React from 'react';
 
 export const LoanApplyButton = ({ loanId, onApply }) => {

@@ -4,23 +4,40 @@ import { useNavigate } from 'react-router-dom';
 export const SignUpForm = () => {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
-    const [nickname, setNickname] = useState('');
+    const [userName, setUsername] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         // 간단한 유효성 검사
-        if (!userId || !password || !nickname) {
+        if (!userId || !password || !userName) {
             alert('모든 필드를 채워주세요.');
             return;
         }
 
-        // 회원가입 처리 로직을 여기에 추가하세요
-        // 예를 들어, 사용자 정보를 서버로 전송하고, 성공 시 적절한 처리를 하세요
+        try {
+            const response = await fetch('http://localhost:8081/person/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    password: password,
+                    username: userName,
+                }),
+            });
 
-        // 예제: 회원가입 성공 시 대시보드 페이지로 리다이렉트
-        navigate('/dashboard');
+            if (response.ok) {
+                const data = await response.text();
+                alert(`${data}`);
+                navigate('/');
+            }
+        } catch (error) {
+            console.error('회원가입 중 오류 발생:', error);
+            alert('회원가입 중 오류가 발생했습니다.');
+        }
     };
 
     return (
@@ -51,12 +68,12 @@ export const SignUpForm = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label htmlFor="nickname" className="block text-gray-700">닉네임</label>
+                        <label htmlFor="userName" className="block text-gray-700">닉네임</label>
                         <input
                             type="text"
-                            id="nickname"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
+                            id="userName"
+                            value={userName}
+                            onChange={(e) => setUsername(e.target.value)}
                             className="w-full p-2 border border-gray-300 rounded"
                             required
                         />
