@@ -1,12 +1,18 @@
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import { useReducer } from 'react';
-import './App.css';
-import './styles/global.css'; // Tailwind와 커스텀 글로벌 CSS 포함
-import HeaderNav from './components/ui/HeaderNav'; // HeaderNav 경로를 확인하세요
-import { LoanContext, LoanDispatchContext } from './contexts/Loancontext.jsx';
-import { LoanList } from './components/LoanList/LoanList.jsx';
-import { LoginForm } from './components/UserSheet/LoginForm';
-import { SignUpForm } from './components/UserSheet/SignUpForm';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
+import { useReducer } from "react";
+import "./App.css";
+import "./styles/global.css"; // Tailwind와 커스텀 글로벌 CSS 포함
+import HeaderNav from "./components/ui/HeaderNav"; // HeaderNav 경로를 확인하세요
+import { LoanContext, LoanDispatchContext } from "./contexts/Loancontext.jsx";
+import { LoanList } from "./components/LoanList/LoanList.jsx";
+import { LoginForm } from "./components/UserSheet/LoginForm";
+import { SignUpForm } from "./components/UserSheet/SignUpForm";
+import { UserLoanList } from "./components/LoanList/UserLoanList.jsx";
 
 const initialLoanProducts = [
   // {
@@ -44,10 +50,9 @@ const initialLoanProducts = [
   // },
 ];
 
-
 const reducer = (loans, action) => {
   switch (action.type) {
-    case 'ADD':
+    case "ADD":
       return [...loans, action.newLoan];
     default:
       return loans;
@@ -64,6 +69,7 @@ function App() {
         <LoanDispatchContext.Provider value={dispatch}>
           <Routes>
             <Route path="/" element={<LoanList />} />
+            <Route path="/invest" element={<UserLoanList />} />
             <Route path="/login" element={<LoginForm />} />
             <Route path="/signup" element={<SignUpForm />} />
             {/* Add other routes as needed */}
@@ -78,12 +84,19 @@ function HomePage() {
   const navigate = useNavigate();
 
   const handleButtonClick = () => {
-    navigate('/LoanList');
+    navigate("/LoanList");
+  };
+
+  const handleUserLoanListButtonClick = () => {
+    navigate("/UserLoanList");
   };
 
   return (
     <div>
       <button onClick={handleButtonClick}>대출 상품 목록 보기</button>
+      <button onClick={handleUserLoanListButtonClick}>
+        받은 대출 목록 보기
+      </button>
     </div>
   );
 }

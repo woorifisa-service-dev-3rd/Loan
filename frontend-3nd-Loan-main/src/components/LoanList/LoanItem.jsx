@@ -1,16 +1,14 @@
 // LoanItem.jsx
-import React from 'react';
-import { LoanApplyButton } from './LoanApplyButton';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { LoanApplyButton } from "./LoanApplyButton";
+import { useNavigate } from "react-router-dom";
 
-export const LoanItem = ({ loan, onApply }) => {
+export const LoanItem = ({ loan, onApply, isUserLoan }) => {
   const navigate = useNavigate();
 
   const handleNextClick = () => {
-    navigate('/authentication');
+    navigate("/authentication");
   };
-
-  // max_limit을 숫자로 변환
   const maxLimit = Number(loan.max_limit);
   return (
     <div className="flex justify-center items-center py-2 px-4">
@@ -23,7 +21,13 @@ export const LoanItem = ({ loan, onApply }) => {
           {/* 여기에 은행 로고 이미지 추가 */}
         </picture>
         <picture className="hidden dark:block">
-          <img src="/imsilogo.jpeg" alt="은행 로고" width="100" height="100" className="mr-6" />
+          <img
+            src="/imsilogo.jpeg"
+            alt="은행 로고"
+            width="100"
+            height="100"
+            className="mr-6"
+          />
         </picture>
         <div className="flex flex-col gap-4">
           <h3 className="text-gray-900">
@@ -45,7 +49,11 @@ export const LoanItem = ({ loan, onApply }) => {
               </dd>
             </div>
           </dl>
-          <LoanApplyButton loanId={loan.id} onApply={onApply} />
+          <LoanApplyButton
+            loanId={loan.id}
+            onApply={onApply}
+            disabled={isUserLoan}
+          />
         </div>
       </a>
     </div>
