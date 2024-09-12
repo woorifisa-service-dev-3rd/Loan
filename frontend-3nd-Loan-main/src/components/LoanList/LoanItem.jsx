@@ -1,7 +1,9 @@
+// LoanItem.jsx
 import React from 'react';
+import { LoanApplyButton } from './LoanApplyButton';
 import { useNavigate } from 'react-router-dom';
 
-export const LoanItem = ({ loan }) => {
+export const LoanItem = ({ loan, onApply }) => {
   const navigate = useNavigate();
 
   const handleNextClick = () => {
@@ -43,6 +45,7 @@ export const LoanItem = ({ loan }) => {
               </dd>
             </div>
           </dl>
+          <LoanApplyButton loanId={loan.id} onApply={onApply} />
         </div>
       </a>
     </div>

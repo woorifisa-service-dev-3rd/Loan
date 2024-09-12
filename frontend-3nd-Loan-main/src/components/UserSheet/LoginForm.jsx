@@ -5,11 +5,12 @@ export const LoginForm = () => {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // 간단한 유효성 검사
-        if (!userId || !password || !userName) {
+        if (!userId || !password) {
             alert('모든 필드를 채워주세요.');
             return;
         }
@@ -22,19 +23,22 @@ export const LoginForm = () => {
                 },
                 body: JSON.stringify({
                     user_id: userId,
-                    password: password,
-                    username: userName,
+                    password: password
                 }),
+                credentials: 'include', // 세션 쿠키를 포함시키기 위한 설정
             });
 
             if (response.ok) {
                 const data = await response.text();
                 alert(`${data}`);
                 navigate('/');
+            } else {
+                const errorMessage = await response.text();
+                alert(`로그인 실패: ${errorMessage}`);
             }
         } catch (error) {
-            console.error('회원가입 중 오류 발생:', error);
-            alert('회원가입 중 오류가 발생했습니다.');
+            console.error('로그인 중 오류 발생:', error);
+            alert('로그인 중 오류가 발생했습니다.');
         }
     };
 
