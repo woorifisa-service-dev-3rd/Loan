@@ -5,18 +5,36 @@ export const LoginForm = () => {
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // 로그인 로직을 여기에 추가하세요
-        // 예를 들어, ID와 비밀번호가 정확한지 확인하고,
-        // 로그인 성공 시 적절한 처리를 하세요
+        // 간단한 유효성 검사
+        if (!userId || !password || !userName) {
+            alert('모든 필드를 채워주세요.');
+            return;
+        }
 
-        if (userId === 'admin' && password === 'password') { // 예제 조건
-            navigate('/dashboard'); // 로그인 성공 시 리다이렉트할 경로
-        } else {
-            alert('로그인 실패! 사용자 ID와 비밀번호를 확인해주세요.');
+        try {
+            const response = await fetch('http://localhost:8081/person/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    password: password,
+                    username: userName,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.text();
+                alert(`${data}`);
+                navigate('/');
+            }
+        } catch (error) {
+            console.error('회원가입 중 오류 발생:', error);
+            alert('회원가입 중 오류가 발생했습니다.');
         }
     };
 

@@ -10,7 +10,6 @@ export const LoanItem = ({ loan }) => {
 
   // max_limit을 숫자로 변환
   const maxLimit = Number(loan.max_limit);
-
   return (
     <div className="flex justify-center items-center py-2 px-4">
       <a
