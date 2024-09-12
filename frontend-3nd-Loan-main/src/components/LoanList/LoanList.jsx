@@ -10,7 +10,7 @@ export const LoanList = () => {
   useEffect(() => {
     const fetchLoans = async () => {
       try {
-        const response = await fetch('http://localhost:8081/loan/loanlist'); // 서버에서 대출 리스트 가져오기
+        const response = await fetch('http://localhost:8081/product'); // 서버에서 대출 리스트 가져오기
         if (!response.ok) {
           throw new Error('Failed to fetch loans');
         }

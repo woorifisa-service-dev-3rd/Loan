@@ -8,6 +8,9 @@ export const LoanItem = ({ loan }) => {
     navigate('/authentication');
   };
 
+  // max_limit을 숫자로 변환
+  const maxLimit = Number(loan.max_limit);
+
   return (
     <div className="flex justify-center items-center py-2 px-4">
       <a
@@ -23,21 +26,21 @@ export const LoanItem = ({ loan }) => {
         </picture>
         <div className="flex flex-col gap-4">
           <h3 className="text-gray-900">
-            <span className="font-bold text-xl">{loan.provider}</span>
+            <span className="font-bold text-xl">{loan.company}</span>
             <br />
-            <span className="font-medium">{loan.name}</span>
+            <span className="font-medium">{loan.title}</span>
           </h3>
           <dl className="flex gap-x-6 text-left">
             <div>
               <dt className="text-gray-500 font-medium">최저 금리</dt>
-              <dd className="text-[22px] font-extrabold">{loan.interestRate}%</dd>
+              <dd className="text-[22px] font-extrabold">{loan.min_rate}%</dd>
             </div>
             <div>
               <dt className="text-gray-500 font-medium">최대 한도</dt>
               <dd className="text-[22px] font-extrabold">
-                {loan.maxLimit / 10000 > 10000
-                  ? `${(loan.maxLimit / 100000000).toFixed(1)} 억`
-                  : `${(loan.maxLimit / 10000).toFixed(0)} 만원`}
+                {maxLimit > 100000000
+                  ? `${(maxLimit / 100000000).toFixed(1)} 억`
+                  : `${(maxLimit / 10000).toFixed(0)} 만원`}
               </dd>
             </div>
           </dl>
