@@ -48,4 +48,4 @@ export const LoanItem = ({ loan }) => {
       </a>
     </div>
   );
-};
+}

@@ -29,7 +29,7 @@ export default function HeaderNav() {
         {/* 중앙 정렬 항목 */}
         <div className="flex-grow flex justify-center space-x-4 hidden md:flex">
           <Link to="/invest" className="text-gray-700 hover:text-gray-900">
-            투자하기
+            받은 대출 목록
           </Link>
           <Link to="/" className="text-gray-700 hover:text-gray-900">
             대출상품
