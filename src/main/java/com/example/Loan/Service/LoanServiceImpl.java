@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,12 +28,15 @@ public class LoanServiceImpl implements LoanService{
 
     private final ProductRepository productRepository;
 
+    @PersistenceContext
+    private EntityManager entityManger;
+
     @Override
     @Transactional
     public String SaveLoan(Long product_id, String user_id) {
         //person_id는 autoincrement가 아니라 userid임.
 
-        try {
+
             Person person = personRepository.findByUserId(user_id).orElseThrow(
                     () -> new RuntimeException("사용자 없음")
             );
@@ -40,13 +45,15 @@ public class LoanServiceImpl implements LoanService{
                     () -> new RuntimeException("상품 없음")
             ); //이건 auto id
 
-            loanRepository.save(Loan.builder().person(person).product(product).build());
-            return "대출 성공";
-        } catch (RuntimeException re)
-        {
-            log.info(re.getMessage());
-            return "대출 도중 오류 발생";
-        }
+            if(duplicateCheck(product_id,user_id))
+            {
+                loanRepository.save(Loan.builder().person(person).product(product).build());
+                return "대출 성공";
+            } else{
+                return "이미 대출된 상품입니다";
+            }
+
+
 
     }
 
@@ -57,5 +64,13 @@ public class LoanServiceImpl implements LoanService{
         return loanRepository.findAllLoanByUserId(person_id).stream()
                 .map(LoanResponse::FROM)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean duplicateCheck(Long product_id, String person_user_id) {
+
+        Long person_pk_id = personRepository.findByUserId(person_user_id).get().getId();
+
+        return !loanRepository.existsByProductIdAndPersonId(product_id,person_pk_id);
     }
 }

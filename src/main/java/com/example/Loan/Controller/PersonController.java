@@ -39,7 +39,7 @@ public class PersonController {
         return ResponseEntity.ok(personService.NickDuplicateCheck(nickname));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO, HttpSession session)
     {
         String result = personService.login(loginDTO,session);
@@ -54,7 +54,16 @@ public class PersonController {
 
     @GetMapping("/sessioncheck")
     public boolean sessionCheck(HttpSession session) {
-        return session.getAttribute("userid") != null;
+        log.info("session 검사");
+        boolean checkresult =  session.getAttribute("userid") != null;
+        log.info(checkresult+"  세션체크");
+        return checkresult;
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        return ResponseEntity.ok("로그아웃 성공");
     }
 
 

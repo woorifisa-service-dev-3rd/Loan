@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -31,15 +33,10 @@ public class LoanController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("로그인 부터 하세요");
         }
         String user_id = session.getAttribute("userid").toString();
-        //대출 중복 문제 고민해보기
+        //대출 중복 문제 고민해보기x
 
         String savestate = loanService.SaveLoan(product_id,user_id);
-        if (savestate.equals("대출 성공"))
-        {
-            return ResponseEntity.ok(savestate);
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(savestate);
-        }
+        return ResponseEntity.ok(savestate);
 
     }
 
