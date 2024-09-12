@@ -58,9 +58,9 @@ export const LoanList = () => {
           alert(result);
           // 대출 성공 후 페이지를 갱신하거나 다른 작업을 수행할 수 있습니다.
         } else {
-          alert(result);
-        }
-        navigate('/'); // 대출 중복 시 메인 페이지로 리디렉션
+          alert(result); 
+        }           
+        navigate('/');
       } else {
         throw new Error(result);
       }
