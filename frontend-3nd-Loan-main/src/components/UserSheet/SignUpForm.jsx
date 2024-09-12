@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const SignUpForm = () => {
@@ -9,7 +9,13 @@ export const SignUpForm = () => {
     const [isUserNameValid, setIsUserNameValid] = useState(true);
     const [userIdChecked, setUserIdChecked] = useState(false);
     const [userNameChecked, setUserNameChecked] = useState(false);
+    const [canSubmit, setCanSubmit] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if both userId and userName have been validated
+        setCanSubmit(userIdChecked && userNameChecked && isUserIdValid && isUserNameValid);
+    }, [userIdChecked, userNameChecked, isUserIdValid, isUserNameValid]);
 
     const checkUserId = async () => {
         if (!userId) {
@@ -21,12 +27,10 @@ export const SignUpForm = () => {
             const isDuplicate = await response.json();
             setIsUserIdValid(isDuplicate);
             setUserIdChecked(true);
-            return isDuplicate;
         } catch (error) {
             console.error('ID 중복 체크 중 오류 발생:', error);
             setIsUserIdValid(false);
             setUserIdChecked(true);
-            return false;
         }
     };
 
@@ -40,12 +44,10 @@ export const SignUpForm = () => {
             const isDuplicate = await response.json();
             setIsUserNameValid(isDuplicate);
             setUserNameChecked(true);
-            return isDuplicate;
         } catch (error) {
             console.error('닉네임 중복 체크 중 오류 발생:', error);
             setIsUserNameValid(false);
             setUserNameChecked(true);
-            return false;
         }
     };
 
@@ -57,15 +59,8 @@ export const SignUpForm = () => {
             return;
         }
 
-        const isUserIdAvailable = await checkUserId();
-        const isUserNameAvailable = await checkUserName();
-
-        if (!isUserIdAvailable) {
-            alert('이미 사용 중인 사용자 ID입니다.');
-            return;
-        }
-        if (!isUserNameAvailable) {
-            alert('이미 사용 중인 닉네임입니다.');
+        if (!canSubmit) {
+            alert('ID와 닉네임 중복 체크를 완료해 주세요.');
             return;
         }
 
@@ -173,7 +168,8 @@ export const SignUpForm = () => {
                     </div>
                     <button
                         type="submit"
-                        className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className={`w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600 ${canSubmit ? '' : 'opacity-50 cursor-not-allowed'}`}
+                        disabled={!canSubmit}
                     >
                         회원가입
                     </button>
